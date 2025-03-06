@@ -11,7 +11,7 @@ const path = require('path');
 
 
 const app = express();
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 
 
@@ -34,8 +34,8 @@ app.listen(port, ()=>{
     console.log("Server Started")
 })
     
-app.use('/home', (req, res)=>{
-    res.send("Welcome to Home Page");
+app.use('/', (req, res)=>{
+    res.send("Welcome to Dukes Table");
 })
 app.use('/vendor', vendorRoutes);
 app.use('/firm', firmRoutes)
