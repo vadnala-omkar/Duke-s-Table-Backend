@@ -34,7 +34,7 @@ app.listen(port, ()=>{
     console.log("Server Started")
 })
     
-app.use('/', (req, res)=>{
+app.use('/home', (req, res)=>{
     res.send("Welcome to Dukes Table");
 })
 app.use('/vendor', vendorRoutes);
