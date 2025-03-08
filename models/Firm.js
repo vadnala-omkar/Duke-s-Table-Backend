@@ -17,7 +17,8 @@ const firmSchema = new mongoose.Schema({
     },
     region: {
         type: [{
-            type: String
+            type: String,
+            enum: ['south-indian', 'north-indian', 'chinese', 'bakery']
         }]
     },
     offer: {
