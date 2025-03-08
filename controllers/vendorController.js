@@ -22,13 +22,11 @@ const vendorRegister = async (req, res)=>{
             password: hashedPassword
         });
         await newVendor.save();
-        res.status(201).json({ message: "Vendor registered successfully"});
+        res.status(400).json({ success: true,  message: "Vendor registered successfully"});
         console.log("Vendor registered successfully");
 
-
-
     }catch(err){
-        console.log("Error finding email", err);
+        console.error("Error finding email", err);
         res.status(500).json({message: "Internal Server Error"});
     }
 }
@@ -38,7 +36,7 @@ const vendorLogin =  async(req, res)=>{
     try {
         const vendor = await Vendor.findOne({ email });
         if (!vendor || !(await bcrypt.compare(password, vendor.password))) {
-            return res.status(401).json({ error: "Invalid username or password" })
+            return res.status(201).json({ error: "Invalid username or password" })
         }
         const token = jwt.sign({ vendorId: vendor._id }, secretKey, { expiresIn: "1h" })
 
@@ -56,7 +54,7 @@ const vendorLogin =  async(req, res)=>{
 const getAllVendors = async (req, res) => {
     try {
         const vendors =  await Vendor.find().populate('firm');
-        res.status(200).json(vendors);
+        res.json({vendors});
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: "Internal server error" });
@@ -72,7 +70,9 @@ const getVendorById = async (req, res) => {
         if(!vendor){
             return res.status(404).json({error: "Vendor not found"});
         }
-        res.status(200).json({vendor});
+        const vendorFirmId = vendor.firm[0]._id;
+        res.status(200).json({ vendorId, vendorFirmId, vendor })
+        console.log(vendorFirmId);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: "Internal server error" });
